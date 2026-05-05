@@ -1,0 +1,30 @@
+paths:
+  raw_xml_dir: "data/raw_xml"
+  interim_npy_dir: "data/interim_npy"
+  processed_dir: "data/processed"
+  labels_csv: null
+
+# 归途格式固定字段，不再用 candidate_keys 了
+parse:
+  vendor: "Guitu"
+  sampling_rate: 500          # 来自 SampleRate
+  fixed_length_sec: 10        # LeadSampleCountTotal=5000/500Hz
+  scale_to: "mV"              # uV→mV（常见可视化、建模单位）
+  # 12导联输出顺序（如XML缺某导联则全零填充）
+  lead_order: ["I","II","III","aVR","aVL","aVF","V1","V2","V3","V4","V5","V6"]
+
+preprocess:
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  normalize: true             # per-lead z-score
+  random_seed: 42
+
+train:
+  batch_size: 32
+  epochs: 10
+  lr: 1e-3
+  task: auto
+
+labels:
+  num_classes: 2
