@@ -60,12 +60,14 @@ class ArcFaceCriterion(BaseCriterion):
 
         cos_theta_m[cond_mask] = keep_val[cond_mask]
         logits = cos_theta * 1.0
-        idx = torch.arange(0, cos_theta.size(0))
+        target = target.reshape(-1).long()
+        idx = torch.arange(0, cos_theta.size(0),device=cos_theta.device)
 
         logits[idx, target] = cos_theta_m[idx, target]
         logits *= self.scale
 
         reduction = "none" if not reduce else "sum"
+        
         loss = F.cross_entropy(
             input=logits,
             target=target,
